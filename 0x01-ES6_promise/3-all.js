@@ -10,10 +10,11 @@
 // photo-profile-1 Guillaume Salva
 import { uploadPhoto, createUser } from './utils';
 
-export default function handleProfileSignup() {
-  return Promise.all([uploadPhoto(), createUser()])
-    .then(([value1, value2]) => {
-      console.log(`${value1.body}`, `${value2.firstName}`, `${value2.lastName}`);
-    })
-    .catch(() => { console.log('Signup system offline'); });
+export default async function handleProfileSignup() {
+  try {
+    const [result1, result2] = await Promise.all([uploadPhoto(), createUser()]);
+    console.log(`${result1.body} ${result2.firstName} ${result2.lastName}`);
+  } catch (error) {
+    console.log('Signup system offline');
+  }
 }
