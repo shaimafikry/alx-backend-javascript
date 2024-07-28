@@ -9,7 +9,12 @@
 // When the Promise rejects, return an empty Error object
 // For every resolution, log Got a response from the API to the console
 export default function handleResponseFromAPI(promise) {
-  return promise.then(() => {
+  return promise((reslove, reject)=> {
+    reslove({
+      status: 200,
+      body: 'Success',
+    })
+    reject(new Error())}).then(() => {
     console.log('Got a response from the API');
   });
 }
