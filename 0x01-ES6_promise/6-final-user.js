@@ -16,13 +16,17 @@ import uploadPhoto from './5-photo-reject';
 export default function handleProfileSignup(firstName, lastName, fileName) {
   return Promise.allSettled([signUpUser(firstName, lastName), uploadPhoto(fileName)])
     .then((results) => {
-      const all_result = results.map((result) => {
-        if (result.status === 'fulfilled'){
-          return {status: result.status, value: result.value};
-        }else{
-          return {status: result.status, value: result.reason};
+      // results come out as a list of every promise
+      results.forEach((result) => {
+        // loop through every promise
+        const promise = result;
+        // this condition was made to delete the reset of error message(reason)
+        // if the promise is rejected and get only the error message as the task want
+        if (promise.status === 'rejected') {
+          promise.value = `Error: ${promise.reason.message}`;
+          delete promise.reason;
         }
+      });
+      // console.log(results);
     });
-    console.log(all_result);
-});
 }
