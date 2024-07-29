@@ -17,7 +17,7 @@ export default function guardrail(mathFunction) {
     queue.push(mathFunction());
   } catch (e) {
   // catch the error by catch
-    queue.push(`Error ${e.message}`);
+    queue.push(`Error: ${e.message}`);
   // push the sentence on both condiotions
   } finally {
     queue.push('Guardrail was processed');
