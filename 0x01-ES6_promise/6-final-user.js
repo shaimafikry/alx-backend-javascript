@@ -27,6 +27,6 @@ export default function handleProfileSignup(firstName, lastName, fileName) {
           delete promise.reason;
         }
       });
-      // console.log(results);
+      console.log(results);
     });
 }
