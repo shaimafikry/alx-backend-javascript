@@ -22,22 +22,22 @@ export default class Currency {
     }
   }
 
+  get name() {
+    return this._name;
+  }
+
   set name(name) {
     this._checkType(name);
     this._name = name;
-  }
-
-  set code(code) {
-    this._checkType(code);
-    this._code = code;
   }
 
   get code() {
     return this._code;
   }
 
-  get name() {
-    return this.name;
+  set code(code) {
+    this._checkType(code);
+    this._code = code;
   }
 
   displayFullCurrency() {
