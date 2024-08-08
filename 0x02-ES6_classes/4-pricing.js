@@ -49,7 +49,7 @@ export default class Pricing {
   }
 
   static convertPrice(amount, conversionRate) {
-    return this._amount * conversionRate;
+    return amount * conversionRate;
   }
 
   displayFullPrice() {
