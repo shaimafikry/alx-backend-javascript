@@ -9,11 +9,14 @@
 // throw an error with the message Class extending Building must override evacuationWarningMessage
 export default class Building {
   constructor(sqft) {
+    // console.log(this.constructor.name);
     if (typeof sqft !== 'number') {
       throw new TypeError('sqft must be a number');
     }
-    // to check if the child has the mesthod or not
-    if (!this.evacuationWarningMessage()) {
+    // to check if the child has the method or not
+    // check first if i am not in the building itself
+    // then check for th method
+    if (this.constructor.name !== 'Building' && this.evacuationWarningMessage === Building.prototype.evacuationWarningMessage) {
       throw new Error('Class extending Building must override evacuationWarningMessage');
     }
     this._sqft = sqft;
@@ -30,9 +33,9 @@ export default class Building {
     this._sqft = sqft;
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  evacuationWarningMessage() {
-    // this error hapenes when the child class tries to use this method without overwritting it
-    throw new Error('Class extending Building must override evacuationWarningMessage');
-  }
+// eslint-disable-next-line class-methods-use-this
+// evacuationWarningMessage() {
+// this error hapenes when the child class tries to use this method without overwritting it
+// throw new Error('Class extending Building must override evacuationWarningMessage');
+//   }
 }
