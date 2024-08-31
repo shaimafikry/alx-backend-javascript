@@ -1,5 +1,5 @@
 export default function cleanSet(set, startString) {
-  if (typeof startString != 'string' || startString === '') {
+  if (typeof startString !== 'string' || startString === '') {
     return '';
   }
   const res = [];
@@ -8,5 +8,5 @@ export default function cleanSet(set, startString) {
       res.push(i.slice(startString.length));
     }
   }
-  return res.join('-');  
+  return res.join('-');
 }
