@@ -1,5 +1,5 @@
 export default function cleanSet(set, startString) {
-  if (!startString instanceof String || startString === '') {
+  if (typeof startString != 'string' || startString === '') {
   return '';
   }
   const res = [];
