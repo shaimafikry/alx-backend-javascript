@@ -1,4 +1,4 @@
-export default cleanSet(set, startString) {
+export default function cleanSet(set, startString) {
   if (startString === '') {
     return '';
   }
