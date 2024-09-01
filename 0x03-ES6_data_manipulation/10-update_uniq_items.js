@@ -1,6 +1,6 @@
 export default function updateUniqueItems(argMap) {
   if (!(argMap instanceof Map)) {
-    throw new Error('argument is not a map');
+    throw new Error('Cannot process');
   }
   // For each entry of the map where the quantity
   // is 1, update the quantity to 100
