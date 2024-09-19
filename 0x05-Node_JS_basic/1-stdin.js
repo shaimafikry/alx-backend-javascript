@@ -1,4 +1,4 @@
-console.log('Welcome to Holberton School, what is your name?');
+process.stdout.write('Welcome to Holberton School, what is your name?\n');
 // taking input
 process.stdin.on('readable', () => {
   const inp = process.stdin.read();
@@ -8,5 +8,5 @@ process.stdin.on('readable', () => {
 });
 
 process.stdin.on('end', () => {
-  console.log('This important software is now closing\n');
+  process.stdout.write('This important software is now closing\n');
 });
