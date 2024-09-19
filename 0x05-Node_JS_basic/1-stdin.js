@@ -1,4 +1,12 @@
-const prompt = require('prompt-sync')();
-const user_name = prompt('Welcome to Holberton School, what is your name?');
+console.log('Welcome to Holberton School, what is your name?');
+// taking input
+process.stdin.on('readable', () => {
+  const inp = process.stdin.read();
+  if (inp) {
+    console.log(`Your name is: ${inp}`);
+  }
+});
 
-console.log(`Your name is: ${user_name}`)
+process.stdin.on('end', () => {
+  console.log('This important software is now closing\n');
+});
