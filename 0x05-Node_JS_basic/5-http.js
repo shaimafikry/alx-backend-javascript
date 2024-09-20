@@ -15,7 +15,7 @@ const app = http.createServer(async (req, res) => {
       res.statusCode = 200;
       msg += studentInfo;
     } catch (error) {
-      msg += 'Cannot load the database';  // Handle the case when the file doesn't exist
+      msg += 'Cannot load the database'; // Handle the case when the file doesn't exist
       res.statusCode = 500;
     }
     // console.log(msg);
