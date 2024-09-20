@@ -6,6 +6,7 @@ function countStudents(path) {
       .then((data) => {
         const dataArray = data.split('\n').filter((line) => line.trim() !== '');
         const numSt = dataArray.length - 1;
+        output = `Number of students: ${numSt}\n`;
         console.log(`Number of students: ${numSt}`);
         const csList = [];
         const swList = [];
@@ -19,9 +20,11 @@ function countStudents(path) {
           }
           // console.log(student_data);
         }
-        console.log(`Number of students in CS: 6. List: ${csList.join(', ')}`);
+        output += `Number of students in CS: 6. List: ${csList.join(', ')}\n`
+        console.log(`Number of students in CS: 6. List: ${csList.join(', ')}\n`);
+        output += `Number of students in SWE: 4. List: ${swList.join(', ')}`
         console.log(`Number of students in SWE: 4. List: ${swList.join(', ')}`);
-        resolve();
+        resolve(output);
       })
       .catch(() => {
         reject(new Error('Cannot load the database'));
