@@ -10,9 +10,14 @@ const app = http.createServer(async (req, res) => {
     res.end(msg);
   } else if (req.url === '/students') {
     let msg = 'This is the list of our students\n';
-    const studentInfo = await countStudents('database.csv'); // Handle the Promise result
-    res.statusCode = 200;
-    msg += studentInfo;
+    try {
+      const studentInfo = await countStudents('database.csv'); // Handle the Promise result
+      res.statusCode = 200;
+      msg += studentInfo;
+    } catch (error) {
+      msg += 'Cannot load the database';  // Handle the case when the file doesn't exist
+      res.statusCode = 500;
+    }
     // console.log(msg);
     res.setHeader('Content-Type', 'text/plain');
     res.setHeader('Content-Length', Buffer.byteLength(msg)); // Use Buffer.byteLength for accurate length
