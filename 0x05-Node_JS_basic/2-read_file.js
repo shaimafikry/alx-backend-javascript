@@ -37,7 +37,7 @@ module.exports = countStudents;
 
 // function countStudents(fileName) {
 //   try {
-//     const data = fs.readFileSync(fileName, 'utf8').toString().split('\n');;
+//     const data = fs.readFileSync(fileName, 'utf8').split('\n');;
 //     // console.log(data);
 //     // the output is a whole string
 //     // split on the \n and filter the empyt lines, empty lines on trim would equal ''
