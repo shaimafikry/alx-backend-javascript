@@ -11,10 +11,10 @@ app.get('/', (req, res) => {
 app.get('/students', async (req, res) => {
   res.setHeader('Content-Type', 'text/plain'); // Ensure plain text
 
-  if (!database) {
-    res.send('This is the list of our students\nNo database provided');
-    return;
-  }
+  // if (!database) {
+  //   res.send('This is the list of our students\nNo database provided');
+  //   return;
+  // }
 
   try {
     const data = await countStudents(database);
