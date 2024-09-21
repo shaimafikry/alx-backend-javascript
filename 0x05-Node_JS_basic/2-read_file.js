@@ -47,8 +47,8 @@ function countStudents(fileName) {
       }
       // console.log(student_data);
     }
-    console.log(`Number of students in CS: 6. List: ${csList.join(', ')}`);
-    console.log(`Number of students in SWE: 4. List: ${swList.join(', ')}`);
+    console.log(`Number of students in CS: ${csList.length}. List: ${csList.join(', ')}`);
+    console.log(`Number of students in SWE: ${swList.length}. List: ${swList.join(', ')}`);
   });
 }
 module.exports = countStudents;
