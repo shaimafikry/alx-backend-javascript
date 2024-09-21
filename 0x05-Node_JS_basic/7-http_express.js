@@ -9,7 +9,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/students', async (req, res) => {
-  const data = await countStudents('database.csv');
+  const data = await countStudents(process.argv[2]);
   res.send(`This is the list of our students\n${data}`);
 });
 app.listen(1245);
