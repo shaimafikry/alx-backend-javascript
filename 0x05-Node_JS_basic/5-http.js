@@ -1,6 +1,7 @@
 const http = require('http');
 const countStudents = require('./3-read_file_async');
 
+const database = process.argv[2];
 const app = http.createServer(async (req, res) => {
   if (req.url === '/') {
     const msg = 'Hello Holberton School!';
@@ -11,7 +12,7 @@ const app = http.createServer(async (req, res) => {
   } else if (req.url === '/students') {
     let msg = 'This is the list of our students\n';
     try {
-      const studentInfo = await countStudents('database.csv'); // Handle the Promise result
+      const studentInfo = await countStudents(database); // Handle the Promise result
       res.statusCode = 200;
       msg += studentInfo;
     } catch (error) {
