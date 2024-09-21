@@ -2,12 +2,15 @@ const fs = require('node:fs');
 
 function countStudents(fileName) {
   try {
-    const data = fs.readFileSync(fileName, 'utf8');
+    const data = fs.readFileSync(fileName, 'utf8').toString().split('\n');;
     // console.log(data);
     // the output is a whole string
     // split on the \n and filter the empyt lines, empty lines on trim would equal ''
-    const dataArray = data.split('\n').filter((line) => line.trim() !== '');
+    const dataArray = data.filter((line) => line.trim() !== '');
     // console.log(dataArray);
+    if (dataArray.length === 0) {
+      throw new Error('Cannot load the database');
+    }
     const numSt = dataArray.length - 1;
     console.log(`Number of students: ${numSt}`);
     const csList = [];
