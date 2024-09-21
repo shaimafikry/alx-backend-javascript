@@ -1,4 +1,8 @@
-import getResponseFromAPI from "./0-promise.js";
+import asyncUploadUser from "./100-await";
 
-const response = getResponseFromAPI();
-console.log(response instanceof Promise);
+const test = async () => {
+    const value = await asyncUploadUser();
+    console.log(value);
+};
+
+test();
