@@ -1,4 +1,4 @@
-import fs from 'fs/promises';
+const fs = require('fs').promises;
 
 export default async function readDatabase(filePath) {
   try {
