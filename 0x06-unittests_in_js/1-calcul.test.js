@@ -2,16 +2,31 @@
 const assert = require('assert');
 const  calculateNumber =  require('./1-calcul');
 // However, remember that your tests should not only verify what a function is supposed to do, but also the edge cases
-describe('math function that return RESULT of two number based on type', function() {
-  describe('#SUM', function (){
-		it('should return 7 when given 2, 5', function() {
-			assert.strictEqual(calculateNumber('SUM', 2, 5), 7);
-		});
-		it('should return 5 when given 1.2, 3.7', function() {
-			assert.strictEqual(calculateNumber('SUM', 1.2, 3.7), 5);
-		});
-	});
+describe('calculateNumber', () => {
+  describe('when type is SUM', () => {
+    it('it round the first argument', () => {
+        assert.equal(calculateNumber('SUM', 1.0, 0), 1);
+        assert.equal(calculateNumber('SUM', 1.3, 0), 1);
+        assert.equal(calculateNumber('SUM', 1.7, 0), 2);
+    });
+    
+    it('it round the second argument', () => {
+        assert.equal(calculateNumber('SUM', 0, 1.0), 1);
+        assert.equal(calculateNumber('SUM', 0, 1.3), 1);
+        assert.equal(calculateNumber('SUM', 0, 1.7), 2);
+    });
+    
+    it('it should return the right number', () => {
+        assert.equal(calculateNumber('SUM', 1.3, 0), 1);
+        assert.equal(calculateNumber('SUM', 0, 1.2), 1);
+        assert.equal(calculateNumber('SUM', 1.3, 1.3), 2);
+        assert.equal(calculateNumber('SUM', 1.7, 1.2), 3);
+        assert.equal(calculateNumber('SUM', 1.3, 1.8), 3);
+        assert.equal(calculateNumber('SUM', 1.6, 1.8), 4);
+    });
+  });
 });
+
 describe('math function that return RESULT of two number based on type', function() {
 	describe('#SUBTRACT', function (){
 		it('should return 3 when given 7, 3.7', function() {
