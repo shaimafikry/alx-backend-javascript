@@ -14,8 +14,8 @@ describe('math function that return sum of tw number', function() {
 		});
 	});
 	describe('add', function (){
-		it('should return 4 when given 1.2, 3.7', function() {
-			assert.strictEqual(calculateNumber(1.2, 3), 4);
+		it('should return 5 when given 1.6, 3', function() {
+			assert.strictEqual(calculateNumber(1.6, 3), 5);
 		});
 	});
 	describe('add', function (){
