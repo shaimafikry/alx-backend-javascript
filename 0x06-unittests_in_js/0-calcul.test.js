@@ -9,18 +9,23 @@ describe('math function that return sum of tw number', function() {
 		});
 	});
 	describe('add', function (){
+		it('should return 5 when given 1.2, 3.7', function() {
+			assert.strictEqual(calculateNumber(1.2, 3.7), 5);
+		});
+	});
+	describe('add', function (){
 		it('should return 5 when given 1, 3.7', function() {
 			assert.strictEqual(calculateNumber(1, 3.7), 5);
 		});
 	});
 	describe('add', function (){
-		it('should return 5 when given 1.6, 3', function() {
-			assert.strictEqual(calculateNumber(1.6, 3), 5);
+		it('should return 6 when given 1.5, 3.7', function() {
+			assert.strictEqual(calculateNumber(1.5, 3.7), 6);
 		});
 	});
 	describe('add', function (){
-		it('should return 6 when given 1.5, 3.7', function() {
-			assert.strictEqual(calculateNumber(1.5, 3.7), 6);
+		it('should return 4 when given 1.2, 3.3', function() {
+			assert.strictEqual(calculateNumber(1.2, 3.3), 4);
 		});
 	});
 });
