@@ -11,11 +11,16 @@ describe('math function that return RESULT of two number based on type', functio
 			assert.strictEqual(calculateNumber('SUM', 1.2, 3.7), 5);
 		});
 	});
+});
+describe('math function that return RESULT of two number based on type', function() {
 	describe('#SUBTRACT', function (){
 		it('should return 3 when given 7, 3.7', function() {
 			assert.strictEqual(calculateNumber('SUBTRACT', 7, 3.7), 3);
 		});
 	});
+});
+
+describe('math function that return RESULT of two number based on type', function() {
 	describe('#DIVIDE ', function (){
 		it('should return 6 when given 12.2, 2', function() {
 			assert.strictEqual(calculateNumber('DIVIDE', 12.2, 2), 6);
