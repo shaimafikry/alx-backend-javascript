@@ -1,27 +1,37 @@
-// Tests should be around the “rounded” part
-const assert = require('assert');
-const  calculateNumber =  require('./1-calcul');
-// However, remember that your tests should not only verify what a function is supposed to do, but also the edge cases
-describe('math function that return RESULT of two number based on type', function() {
-  describe('#SUM', function (){
-		it('should return 7 when given 2, 5', function() {
-			assert.strictEqual(calculateNumber('SUM', 2, 5), 7);
-		});
-		it('should return 5 when given 1.2, 3.7', function() {
-			assert.strictEqual(calculateNumber('SUM', 1.2, 3.7), 5);
-		});
-	});
-	describe('#SUBTRACT', function (){
-		it('should return 3 when given 7, 3.7', function() {
-			assert.strictEqual(calculateNumber('SUBTRACT', 7, 3.7), 3);
-		});
-	});
-	describe('#DIVIDE ', function (){
-		it('should return 6 when given 12.2, 2', function() {
-			assert.strictEqual(calculateNumber('DIVIDE', 12.2, 2), 6);
-		});
-		it('should return error when given 1.2, 0', function() {
-			assert.strictEqual(calculateNumber('DIVIDE', 1.2, 0), 'ERROR');
-		});
-	});
+// 2-calcul_chai.test.js
+
+const { expect } = require('chai');
+const calculateNumber = require('./2-calcul_chai');
+
+describe('calculateNumber', function() {
+    describe('SUM', function() {
+        it('should return the sum of two rounded numbers', function() {
+            const result = calculateNumber('SUM', 1.4, 4.5);
+            expect(result).to.equal(6);  // The rounded sum of 1.4 and 4.5
+        });
+    });
+
+    describe('SUBTRACT', function() {
+        it('should return the subtraction of two rounded numbers', function() {
+            const result = calculateNumber('SUBTRACT', 1.4, 4.5);
+            expect(result).to.equal(-4);  // The rounded subtraction of 1 and 5
+        });
+
+        it('should return the correct result when a and b are reversed', function() {
+            const result = calculateNumber('SUBTRACT', 3.9, 1.1);
+            expect(result).to.equal(3);  // 4 - 1
+        });
+    });
+
+    describe('DIVIDE', function() {
+        it('should return the division of two rounded numbers', function() {
+            const result = calculateNumber('DIVIDE', 1.4, 4.5);
+            expect(result).to.equal(0.2);  // 1 / 5
+        });
+
+        it('should return "Error" when dividing by zero', function() {
+            const result = calculateNumber('DIVIDE', 1.4, 0);
+            expect(result).to.equal('Error');  // Division by zero case
+        });
+    });
 });
