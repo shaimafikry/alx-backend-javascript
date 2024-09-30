@@ -1,6 +1,658 @@
 # 0x06-unittests_in_js
+Certainly! Testing is a crucial part of software development, ensuring that your code behaves as expected and remains maintainable. **Mocha** is a popular JavaScript test framework running on Node.js, making it a great choice for writing both unit and integration tests. In this guide, we'll cover:
 
-Different between mocha in commonjs and esm and how to deal with during test
+1. **Setting Up Mocha**
+2. **Writing Test Suites with Mocha**
+3. **Using Assertion Libraries (Node's `assert` and Chai)**
+4. **Organizing Long Test Suites**
+5. **Using Spies**
+6. **Using Stubs**
+7. **Understanding Hooks**
+8. **Unit Testing with Async Functions**
+9. **Writing Integration Tests with a Small Node Server**
+
+Let's dive into each topic step-by-step.
+
+---
+
+## 1. Setting Up Mocha
+
+### Installation
+
+First, you need to install Mocha as a development dependency in your project:
+
+```bash
+npm install --save-dev mocha
+```
+
+### Project Structure
+
+A typical project structure might look like this:
+
+```
+project/
+├── src/
+│   └── yourCode.js
+├── test/
+│   └── yourCode.test.js
+├── package.json
+└── .gitignore
+```
+
+### Configuring `package.json`
+
+Add a test script to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "test": "mocha"
+  }
+}
+```
+
+Now, you can run your tests using:
+
+```bash
+npm test
+```
+
+---
+
+## 2. Writing Test Suites with Mocha
+
+Mocha uses **describe** and **it** blocks to organize tests.
+
+### Example
+
+```javascript
+// test/math.test.js
+const assert = require('assert');
+const { add, subtract } = require('../src/math');
+
+describe('Math Functions', function() {
+  describe('#add()', function() {
+    it('should return 5 when adding 2 and 3', function() {
+      assert.strictEqual(add(2, 3), 5);
+    });
+
+    it('should return -1 when adding -2 and 1', function() {
+      assert.strictEqual(add(-2, 1), -1);
+    });
+  });
+
+  describe('#subtract()', function() {
+    it('should return 1 when subtracting 3 from 4', function() {
+      assert.strictEqual(subtract(4, 3), 1);
+    });
+
+    it('should return -5 when subtracting 5 from 0', function() {
+      assert.strictEqual(subtract(0, 5), -5);
+    });
+  });
+});
+```
+
+### Running the Test
+
+```bash
+npm test
+```
+
+**Output:**
+
+```
+  Math Functions
+    #add()
+      ✓ should return 5 when adding 2 and 3
+      ✓ should return -1 when adding -2 and 1
+    #subtract()
+      ✓ should return 1 when subtracting 3 from 4
+      ✓ should return -5 when subtracting 5 from 0
+
+  4 passing (10ms)
+```
+
+---
+
+## 3. Using Assertion Libraries (Node's `assert` and Chai)
+
+### Node's Built-in `assert` Module
+
+Node.js comes with a built-in `assert` module, which provides a set of assertion functions.
+
+#### Example
+
+```javascript
+const assert = require('assert');
+
+describe('Array', function() {
+  describe('#indexOf()', function() {
+    it('should return -1 when the value is not present', function() {
+      assert.strictEqual([1, 2, 3].indexOf(4), -1);
+    });
+  });
+});
+```
+
+### Chai Assertion Library
+
+**Chai** is a popular assertion library that offers more expressive and readable assertions. It supports three styles: **assert**, **expect**, and **should**.
+
+#### Installation
+
+```bash
+npm install --save-dev chai
+```
+
+#### Using Chai's `expect` Style
+
+```javascript
+const { expect } = require('chai');
+
+describe('String', function() {
+  describe('#length', function() {
+    it('should return 5 for "Hello"', function() {
+      expect('Hello').to.have.lengthOf(5);
+    });
+  });
+});
+```
+
+#### Using Chai's `should` Style
+
+```javascript
+const chai = require('chai');
+const should = chai.should();
+
+describe('Number', function() {
+  it('should be above 10', function() {
+    const num = 15;
+    num.should.be.above(10);
+  });
+});
+```
+
+### Advantages of Using Chai
+
+- **Readability**: More human-readable assertions.
+- **Flexibility**: Multiple assertion styles.
+- **Extensibility**: Plugins and additional features.
+
+---
+
+## 4. Organizing Long Test Suites
+
+As your project grows, your test suites might become lengthy and complex. Organizing them effectively is essential for maintainability.
+
+### Strategies
+
+1. **Modularize Tests**: Break down tests into smaller, focused files.
+2. **Use Nested `describe` Blocks**: Group related tests within nested `describe` blocks.
+3. **Consistent Naming**: Use descriptive and consistent naming for test files and test cases.
+4. **Setup and Teardown**: Use hooks to manage shared resources.
+
+### Example Structure
+
+```
+test/
+├── auth/
+│   ├── signup.test.js
+│   └── login.test.js
+├── models/
+│   └── user.test.js
+└── utils/
+    └── helper.test.js
+```
+
+### Example of Nested `describe` Blocks
+
+```javascript
+// test/auth/signup.test.js
+const { expect } = require('chai');
+const { signup } = require('../../src/auth');
+
+describe('Auth', function() {
+  describe('#signup()', function() {
+    it('should create a new user', function() {
+      // Test implementation
+    });
+
+    it('should not allow duplicate usernames', function() {
+      // Test implementation
+    });
+  });
+});
+```
+
+---
+
+## 5. Using Spies
+
+**Spies** are used to monitor functions to see if they were called, how many times, and with what arguments. They do not alter the behavior of the function.
+
+### When to Use Spies
+
+- **Verifying Function Calls**: Ensure a function was called as expected.
+- **Testing Call Counts**: Verify the number of times a function was invoked.
+- **Inspecting Arguments**: Check what arguments were passed to a function.
+
+### Using Sinon for Spies
+
+**Sinon** is a popular library for creating spies, stubs, and mocks.
+
+#### Installation
+
+```bash
+npm install --save-dev sinon
+```
+
+#### Example
+
+```javascript
+const sinon = require('sinon');
+const { expect } = require('chai');
+
+function greet(callback) {
+  callback('Hello, World!');
+}
+
+describe('Greet Function', function() {
+  it('should call the callback once with "Hello, World!"', function() {
+    const spy = sinon.spy();
+    greet(spy);
+
+    expect(spy.calledOnce).to.be.true;
+    expect(spy.calledWith('Hello, World!')).to.be.true;
+  });
+});
+```
+
+---
+
+## 6. Using Stubs
+
+**Stubs** are similar to spies but also allow you to control the behavior of functions, such as returning specific values or throwing errors.
+
+### When to Use Stubs
+
+- **Controlling Function Output**: Make a function return a specific value.
+- **Simulating Errors**: Make a function throw an error.
+- **Isolating Tests**: Replace dependencies with controlled behavior.
+
+### Example with Sinon
+
+```javascript
+const sinon = require('sinon');
+const { expect } = require('chai');
+const database = require('../../src/database');
+const { getUser } = require('../../src/user');
+
+describe('User Module', function() {
+  it('should return user data when getUser is called', async function() {
+    const stub = sinon.stub(database, 'findUser').resolves({ id: 1, name: 'Alice' });
+
+    const user = await getUser(1);
+    expect(user).to.deep.equal({ id: 1, name: 'Alice' });
+    expect(stub.calledOnceWith(1)).to.be.true;
+
+    stub.restore(); // Restore the original function
+  });
+});
+```
+
+---
+
+## 7. Understanding Hooks
+
+**Hooks** are functions that run before or after tests, helping manage setup and teardown tasks.
+
+### Types of Hooks
+
+- **`before`**: Runs once before all tests in a `describe` block.
+- **`beforeEach`**: Runs before each test in a `describe` block.
+- **`after`**: Runs once after all tests in a `describe` block.
+- **`afterEach`**: Runs after each test in a `describe` block.
+
+### When to Use Hooks
+
+- **Setup and Teardown**: Initialize or clean up resources before or after tests.
+- **Shared State**: Prepare a shared environment for multiple tests.
+- **Mocking and Stubbing**: Set up spies, stubs, or mocks before tests and restore them afterward.
+
+### Example
+
+```javascript
+const { expect } = require('chai');
+
+describe('Array', function() {
+  let arr;
+
+  before(function() {
+    // Runs once before all tests
+    console.log('Starting Array tests');
+  });
+
+  beforeEach(function() {
+    // Runs before each test
+    arr = [1, 2, 3];
+  });
+
+  afterEach(function() {
+    // Runs after each test
+    arr = [];
+  });
+
+  after(function() {
+    // Runs once after all tests
+    console.log('Completed Array tests');
+  });
+
+  it('should have length 3', function() {
+    expect(arr).to.have.lengthOf(3);
+  });
+
+  it('should include 2', function() {
+    expect(arr).to.include(2);
+  });
+});
+```
+
+---
+
+## 8. Unit Testing with Async Functions
+
+Testing asynchronous code requires handling promises or using async/await syntax to ensure tests wait for asynchronous operations to complete.
+
+### Example with Promises
+
+```javascript
+const { expect } = require('chai');
+
+function fetchData() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve('data');
+    }, 100);
+  });
+}
+
+describe('Async Function', function() {
+  it('should return "data" after 100ms', function() {
+    return fetchData().then(result => {
+      expect(result).to.equal('data');
+    });
+  });
+});
+```
+
+### Example with Async/Await
+
+```javascript
+const { expect } = require('chai');
+
+describe('Async Function', function() {
+  it('should return "data" after 100ms', async function() {
+    const result = await fetchData();
+    expect(result).to.equal('data');
+  });
+});
+```
+
+### Handling Rejections
+
+Ensure you handle promise rejections to prevent unhandled promise rejections in your tests.
+
+```javascript
+describe('Async Function', function() {
+  it('should throw an error', async function() {
+    try {
+      await fetchDataWithError();
+      throw new Error('Expected fetchDataWithError to throw');
+    } catch (error) {
+      expect(error.message).to.equal('Fetch failed');
+    }
+  });
+});
+```
+
+---
+
+## 9. Writing Integration Tests with a Small Node Server
+
+Integration tests verify that different parts of your application work together as expected. Here's how you can set up integration tests for a Node.js server using Mocha, Chai, and **Supertest**.
+
+### Installation
+
+```bash
+npm install --save-dev supertest
+```
+
+### Example Server (`app.js`)
+
+```javascript
+// src/app.js
+const express = require('express');
+const bodyParser = require('body-parser');
+const { addUser, findUser } = require('./models/user');
+
+const app = express();
+app.use(bodyParser.json());
+
+app.post('/auth/signup', async (req, res) => {
+  const { name, email, phone, username, password, address } = req.body;
+  try {
+    await addUser(name, email, phone, username, password, address);
+    res.status(201).json({ message: 'User created successfully' });
+  } catch (error) {
+    if (error.message === 'User already exists') {
+      res.status(400).json({ error: error.message });
+    } else {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
+});
+
+module.exports = app;
+```
+
+### Starting the Server (`server.js`)
+
+```javascript
+// src/server.js
+const app = require('./app');
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+```
+
+### Writing Integration Tests
+
+```javascript
+// test/integration/signup.test.js
+const request = require('supertest');
+const { expect } = require('chai');
+const app = require('../../src/app');
+const pool = require('../../src/config/db'); // Assuming this is your db connection
+
+describe('POST /auth/signup', function() {
+  // Clean up the user_data table before each test
+  beforeEach(async function() {
+    await pool.query('DELETE FROM user_data');
+  });
+
+  it('should create a new user and return 201', async function() {
+    const newUser = {
+      name: 'John Doe',
+      email: 'john@example.com',
+      phone: '1234567890',
+      username: 'johndoe',
+      password: 'password123',
+      address: '123 Main St',
+    };
+
+    const res = await request(app)
+      .post('/auth/signup')
+      .send(newUser)
+      .expect(201);
+
+    expect(res.body).to.have.property('message', 'User created successfully');
+
+    // Verify the user is in the database
+    const user = await pool.query('SELECT * FROM user_data WHERE username=$1', ['johndoe']);
+    expect(user.rows).to.have.lengthOf(1);
+    expect(user.rows[0]).to.include({
+      name: 'John Doe',
+      email: 'john@example.com',
+      phone: '1234567890',
+      username: 'johndoe',
+      address: '123 Main St',
+    });
+    // Password is hashed, so you can verify it's not plain text
+    expect(user.rows[0].password).to.not.equal('password123');
+  });
+
+  it('should return 400 if user already exists', async function() {
+    const existingUser = {
+      name: 'Jane Doe',
+      email: 'jane@example.com',
+      phone: '0987654321',
+      username: 'janedoe',
+      password: 'password456',
+      address: '456 Elm St',
+    };
+
+    // Add the user first
+    await request(app)
+      .post('/auth/signup')
+      .send(existingUser)
+      .expect(201);
+
+    // Attempt to add the same user again
+    const res = await request(app)
+      .post('/auth/signup')
+      .send(existingUser)
+      .expect(400);
+
+    expect(res.body).to.have.property('error', 'User already exists');
+  });
+
+  it('should return 500 on server error', async function() {
+    // Stub the addUser function to throw an error
+    const sinon = require('sinon');
+    const userModel = require('../../src/models/user');
+    const stub = sinon.stub(userModel, 'addUser').throws(new Error('Database error'));
+
+    const newUser = {
+      name: 'Error User',
+      email: 'error@example.com',
+      phone: '1111111111',
+      username: 'erroruser',
+      password: 'errorpass',
+      address: '789 Oak St',
+    };
+
+    const res = await request(app)
+      .post('/auth/signup')
+      .send(newUser)
+      .expect(500);
+
+    expect(res.body).to.have.property('error', 'Internal Server Error');
+
+    stub.restore();
+  });
+});
+```
+
+### Running the Integration Tests
+
+Ensure your test script in `package.json` is set up correctly. If you have multiple test directories, you might need to specify them or use a testing tool like `mocha` with appropriate options.
+
+```bash
+npm test
+```
+
+---
+
+## Additional Tips
+
+### 1. **Using Environment Variables**
+
+Use environment variables to manage configurations like database credentials. Libraries like `dotenv` can help load these variables.
+
+```bash
+npm install dotenv --save
+```
+
+```javascript
+// src/config/db.js
+require('dotenv').config();
+const { Pool } = require('pg');
+
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
+});
+
+module.exports = pool;
+```
+
+### 2. **Mocking External Dependencies**
+
+When writing unit tests, you might want to mock external dependencies to isolate the code being tested. Libraries like **Sinon** or **Proxyquire** can help with this.
+
+### 3. **Continuous Integration (CI)**
+
+Integrate your tests with CI tools like **GitHub Actions**, **Travis CI**, or **Jenkins** to automate testing on every commit or pull request.
+
+### 4. **Coverage Reports**
+
+Use tools like **nyc** (Istanbul) to generate code coverage reports, ensuring that your tests cover a significant portion of your codebase.
+
+```bash
+npm install --save-dev nyc
+```
+
+```json
+// package.json
+{
+  "scripts": {
+    "test": "nyc mocha"
+  }
+}
+```
+
+Run tests with coverage:
+
+```bash
+npm test
+```
+
+---
+
+## Summary
+
+Testing is essential for ensuring the reliability and maintainability of your code. **Mocha** combined with assertion libraries like **Chai** and utilities like **Sinon** provides a powerful toolkit for writing comprehensive tests. By organizing your tests effectively, handling asynchronous code correctly, and using spies and stubs appropriately, you can create robust test suites that cover both unit and integration aspects of your application.
+
+### Key Takeaways:
+
+- **Mocha** is a flexible test framework suitable for both unit and integration tests.
+- **Chai** enhances assertions with readable and expressive syntax.
+- **Sinon** provides tools for spying, stubbing, and mocking functions.
+- **Hooks** (`before`, `beforeEach`, `after`, `afterEach`) help manage setup and teardown processes.
+- **Supertest** is excellent for testing HTTP endpoints in integration tests.
+- Organize your tests into modules and use consistent naming conventions for maintainability.
+- Utilize environment variables and mocking to isolate tests and manage configurations effectively.
+
+Feel free to ask if you have any specific questions or need further clarification on any of these topics!
+
+# Different between mocha in commonjs and esm and how to deal with during test
 
 The error you're encountering:
 
