@@ -9,7 +9,7 @@ function calculateNumber(type, a, b) {
 	}
 	if (type === 'DIVIDE') {
 
-		if (bNum === 0) {throw new 'Error';}
+		if (bNum === 0) {return 'Error';}
 
 	  return (aNum / bNum);
 	}
