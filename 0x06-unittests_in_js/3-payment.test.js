@@ -15,7 +15,7 @@ describe('sendPaymentRequestToApi', async () => {
     //another try without calling
     const spy = sinon.spy(Utils, 'calculateNumber');
     // not call
-    expect(spy.notCalled).to.be.true;
+		expect(spy.calledWith('SUM', 100, 20)).to.be.true;
     spy.restore();
   });
 });
