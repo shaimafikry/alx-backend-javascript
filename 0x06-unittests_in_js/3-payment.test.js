@@ -1,29 +1,23 @@
-import sendPaymentRequestToApi from './3-payment.js';
-import Utils from './utils.js';
-import { expect } from 'chai';
-import sinon from 'sinon';
+const sendPaymentRequestToApi = require('./3-payment');
+const Utils = require('./utils');
+const sinon = require('sinon');
 
-describe('sendPaymentRequestToApi', () => {
-  let spy;
-  // specifiy what to spy on
-  beforeEach(() => {
-    spy = sinon.spy(Utils, 'calculateNumber');
-  });
-  // clear spy ater test
-  afterEach(() => {
+describe('sendPaymentRequestToApi', async () => {
+  const { expect } = await import('chai');
+  
+  it('should use Utils.calculateNumber', () => {
+    const spy = sinon.spy(Utils, 'calculateNumber');
+    sendPaymentRequestToApi(100, 20);
+    expect(spy.calledWith('SUM', 100, 20)).to.be.true;
     spy.restore();
   });
-  // call function
-  it('should call Utils.calculateNumber with correct arguments', () => {
-    sendPaymentRequestToApi(100, 20);
-    expect(spy.calledOnce).to.be.true;
-
-    // check calling
-    expect(spy.calledWith('SUM', 100, 20)).to.be.true;
-  });
-
   it('should fail if Utils.calculateNumber is not called', () => {
-    //no calling
+    //anther try without calling
+    const spy = sinon.spy(Utils, 'calculateNumber');
+    // not call
     expect(spy.notCalled).to.be.true;
+    
+    // استرجاع spy بعد الاختبار
+    spy.restore();
   });
 });
