@@ -12,12 +12,10 @@ describe('sendPaymentRequestToApi', async () => {
     spy.restore();
   });
   it('should fail if Utils.calculateNumber is not called', () => {
-    //anther try without calling
+    //another try without calling
     const spy = sinon.spy(Utils, 'calculateNumber');
     // not call
     expect(spy.notCalled).to.be.true;
-    
-    // استرجاع spy بعد الاختبار
     spy.restore();
   });
 });
